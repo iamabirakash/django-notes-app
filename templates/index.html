@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container py-5">
+    <form class="container mx-auto card p-4" action="{% url 'save_data' %}" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="title">Note Title</label>
+            <input type="text" id="title" name="title" class="form-control"  placeholder="Enter Note Title">
+        </div>
+
+        <div class="mb-3">
+            <label for="desc">Note Description</label>
+            <textarea rows="5" id="desc" name="description" class="form-control" placeholder="Enter Note Description"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" style="width: 100%;" class="btn btn-primary">
+                Add Note <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <div class="mb-3 alert alert-danger">{{message}}</div>
+            {% else %}
+                <div class="mb-3 alert alert-success">{{message}}</div>
+            {% endif %}
+        {% endfor %}
+
+    </form>
+</div>
+<div class="container">
+    <h1>Notes</h1>
+    <div class="row">
+        {% for note in notes %}
+        <div class="p-2 col-sm-2 col-md-3 col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4>{{ note.title }}</h4>
+                    <p>{{ note.description }}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'edit' note.id %}" class="btn btn-sm btn-info">
+                        Edit
+                    </a>
+                    <a href="{% url 'delete' note.id %}" class="btn btn-sm btn-danger">
+                        Delete
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
